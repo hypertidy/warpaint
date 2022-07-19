@@ -23,12 +23,17 @@ map <- function(extent, dimension, projection) {
 
 ## create a raster
 div <- function(x) x[1]/x[2]
-ex <- c(110, 190, -80, -10)
-dm <- as.integer(sort(c(div(diff(ex)[c(1, 3)]), 1)) * 1024)
+ex <- c(120, 170, -80, -30)
+#ex <- c(-1, 1, -1, 1) * 1e7
+prj <- "OGC:CRS84"
+#prj <- "+proj=omerc +lonc=147 +lat_0=-54 +alpha=9 +gamma=30"
+dm <- as.integer(sort(c(div(diff(ex)[c(1, 3)]), 1)) * 556)
 rfile <- vapour:::vapour_create("myfile.tif", extent = ex,
-                                dimension = dm, projection = "OGC:CRS84")
+                                dimension = dm, projection = prj)
+
   #remotes::install_github("hypertidy/grout")
   info <- vapour::vapour_raster_info(rfile)
+
   index <- grout::tile_index( grout:::grout(info, info$tilesXY))
   res <- diff(ex)[c(1, 3)]/info$dimXY
   replace_na <- function(x) {
